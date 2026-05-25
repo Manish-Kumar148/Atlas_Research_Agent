@@ -7,8 +7,9 @@ services:
   # 2. ChromaDB Vector Memory (Private Service)
   - type: pserv
     name: atlas-chromadb
-    env: docker
-    dockerImage: chromadb/chroma:latest
+    runtime: image
+    image:
+      url: docker.io/chromadb/chroma:latest
     envVars:
       - key: IS_PERSISTENT
         value: "TRUE"
