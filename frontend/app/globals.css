@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0b0e;
+  --bg1: #111318;
+  --bg2: #181b22;
+  --bg3: #1e2230;
+  --border: #2a2f3e;
+  --border2: #333a4d;
+  --text: #e8eaf0;
+  --text2: #8b90a0;
+  --text3: #555b70;
+  --accent: #4f8eff;
+  --accent2: #7c3aed;
+  --accent3: #10b981;
+  --accent4: #f59e0b;
+  --accent5: #ef4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(16,185,129,.2); }
+  50%       { box-shadow: 0 0 0 5px rgba(16,185,129,.1); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes typing {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%            { transform: translateY(-5px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.animate-fade-in { animation: fade-in .3s ease; }
+
+/* Markdown report styles */
+.report-body h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; }
+.report-body h2 { font-size: 1rem; font-weight: 600; margin: 1.25rem 0 .5rem;
+  padding-top: 1rem; border-top: 1px solid var(--border); }
+.report-body h3 { font-size: .875rem; font-weight: 600; margin: .75rem 0 .25rem; }
+.report-body p  { font-size: .8rem; color: var(--text2); line-height: 1.7; margin-bottom: .75rem; }
+.report-body ul, .report-body ol { padding-left: 1.25rem; margin-bottom: .75rem; }
+.report-body li { font-size: .8rem; color: var(--text2); line-height: 1.7; }
+.report-body a  { color: var(--accent); text-decoration: underline; }
+.report-body code { font-family: 'IBM Plex Mono', monospace; font-size: .75rem;
+  background: var(--bg2); padding: 1px 5px; border-radius: 3px; }
+.report-body strong { color: var(--text); }
