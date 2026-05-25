@@ -59,13 +59,9 @@ services:
     startCommand: npm start
     envVars:
       - key: NEXT_PUBLIC_BACKEND_URL
-        fromService:
-          type: web
-          name: atlas-backend
-          property: url
+        value: https://atlas-backend.onrender.com
 
 databases:
   # 5. PostgreSQL Database
   - name: atlas-db
     databaseName: atlas
-    user: postgres
