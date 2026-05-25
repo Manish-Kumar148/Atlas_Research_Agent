@@ -11,15 +11,45 @@ settings = get_settings()
 
 _client: Any | None = None
 
+class AsyncLocalCollection:
+    def __init__(self, sync_col):
+        self._sync_col = sync_col
+
+    async def upsert(self, ids: list[str], documents: list[str], metadatas: list[dict]) -> None:
+        self._sync_col.upsert(ids=ids, documents=documents, metadatas=metadatas)
+
+    async def query(self, **kwargs) -> dict:
+        return self._sync_col.query(**kwargs)
+
+class AsyncLocalChromaClient:
+    def __init__(self, path: str):
+        self._sync_client = chromadb.PersistentClient(path=path)
+
+    async def get_or_create_collection(self, name: str, metadata: dict | None = None) -> AsyncLocalCollection:
+        col = self._sync_client.get_or_create_collection(name=name, metadata=metadata)
+        return AsyncLocalCollection(col)
+
+    async def get_collection(self, name: str) -> AsyncLocalCollection:
+        col = self._sync_client.get_collection(name=name)
+        return AsyncLocalCollection(col)
+
+    async def delete_collection(self, name: str) -> None:
+        self._sync_client.delete_collection(name=name)
 
 async def get_chroma_client() -> Any:
     global _client
     if _client is None:
-        _client = await chromadb.AsyncHttpClient(
-            host=settings.chroma_host,
-            port=settings.chroma_port,
-            settings=ChromaSettings(anonymized_telemetry=False),
-        )
+        host = settings.chroma_host.strip().lower() if settings.chroma_host else ""
+        if host in ("local", "in_memory", "in-memory", ""):
+            logger.info("Using local persistent ChromaDB client")
+            _client = AsyncLocalChromaClient(path="./chroma_db")
+        else:
+            logger.info(f"Connecting to remote ChromaDB at {settings.chroma_host}:{settings.chroma_port}")
+            _client = await chromadb.AsyncHttpClient(
+                host=settings.chroma_host,
+                port=settings.chroma_port,
+                settings=ChromaSettings(anonymized_telemetry=False),
+            )
     return _client
 
 

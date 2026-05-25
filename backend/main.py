@@ -36,13 +36,17 @@ async def lifespan(app: FastAPI):
 
     # Test ChromaDB
     try:
-        import httpx
-        async with httpx.AsyncClient() as client:
-            r = await client.get(
-                f"http://{settings.chroma_host}:{settings.chroma_port}/api/v2/heartbeat",
-                timeout=5,
-            )
-            logger.info("✓ ChromaDB connected" if r.status_code == 200 else "✗ ChromaDB heartbeat failed")
+        host = settings.chroma_host.strip().lower() if settings.chroma_host else ""
+        if host in ("local", "in_memory", "in-memory", ""):
+            logger.info("✓ ChromaDB ready (local in-process mode)")
+        else:
+            import httpx
+            async with httpx.AsyncClient() as client:
+                r = await client.get(
+                    f"http://{settings.chroma_host}:{settings.chroma_port}/api/v2/heartbeat",
+                    timeout=5,
+                )
+                logger.info("✓ ChromaDB connected" if r.status_code == 200 else "✗ ChromaDB heartbeat failed")
     except Exception as e:
         logger.warning(f"✗ ChromaDB unavailable: {e}")
 
