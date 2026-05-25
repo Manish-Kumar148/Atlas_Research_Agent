@@ -5,7 +5,7 @@ services:
     ipAllowList: [] # internal access only
 
   # 2. ChromaDB Vector Memory (Private Service)
-  - type: privateService
+  - type: pserv
     name: atlas-chromadb
     env: docker
     dockerImage: chromadb/chroma:latest
@@ -34,7 +34,7 @@ services:
           property: connectionString
       - key: CHROMA_HOST
         fromService:
-          type: privateService
+          type: pserv
           name: atlas-chromadb
           property: host
       - key: CHROMA_PORT
