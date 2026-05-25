@@ -40,4 +40,3 @@ services:
     envVars:
       - key: NEXT_PUBLIC_BACKEND_URL
         value: https://atlas-backend.onrender.com
-        sync: false
